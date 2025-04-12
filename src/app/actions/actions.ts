@@ -19,7 +19,7 @@ const formSchema = z.object({
     const { audience, description, slideCount } = result.data
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/py/presentation`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/presentation`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

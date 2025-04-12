@@ -231,7 +231,7 @@ IMPORTANT:
 5. In the Slides, content don't include any image URLs or search queries, only the image_search in the image_search field and remove the Hyphen (-) from the content.
 """
 
-app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
+app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
@@ -252,11 +252,11 @@ app.add_middleware(
     max_age=3600,
 )
 
-@app.get("/api/py")
+@app.get("/api")
 def get():
     return JSONResponse(content={"message": "Welcome to the Presentation API!"})
 
-@app.post("/api/py/presentation")
+@app.post("/api/presentation")
 @limiter.limit("4/minute")
 async def returnPPTResponse(request: Request, req: PresentationRequest):
     print(f"Received request: {req}")
