@@ -9,7 +9,7 @@ const formSchema = z.object({
   })
 
 
-  export async function createPresentation(formData: any) {
+  export async function createPresentation(formData: z.infer<typeof formSchema>) {
     const result = formSchema.safeParse(formData)
 
     if (!result.success) {
@@ -19,7 +19,7 @@ const formSchema = z.object({
     const { audience, description, slideCount } = result.data
 
     try {
-      const response = await fetch("http://localhost:8000/api/py/presentation", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/py/presentation`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -7,7 +7,7 @@ export function Hero() {
       <div className="container max-w-6xl mx-auto px-4 text-center">
         <h1 className="text-5xl md:text-6xl font-bold mb-6">AI PowerPoint Generator</h1>
         <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-          Create beautiful presentations in seconds with the power of AI. Choose a theme, describe your topic, and we'll
+          Create beautiful presentations in seconds with the power of AI. Choose a theme, describe your topic, and we&apos;ll
           generate professional slides ready to download.
         </p>
         <div className="flex justify-center gap-4">
