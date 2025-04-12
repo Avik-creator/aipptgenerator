@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Loader2, Download } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import { createPresentation } from "@/app/actions/actions"
 import { PresentationPreview } from "@/components/page/presentation-previewer"
 
@@ -134,16 +134,7 @@ export function PresentationForm() {
         <div className="mt-8 space-y-6">
           <PresentationPreview presentation={presentation} />
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button className="flex-1 bg-green-600 hover:bg-green-700">
-              <Download className="mr-2 h-4 w-4" />
-              Download PPTX
-            </Button>
-            <Button className="flex-1 bg-blue-600 hover:bg-blue-700">
-              <Download className="mr-2 h-4 w-4" />
-              Export to Google Slides
-            </Button>
-          </div>
+          
         </div>
       )}
     </div>
