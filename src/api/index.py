@@ -148,7 +148,7 @@ import dotenv
 import os
 import requests  # Add this import
 
-dotenv.load_dotenv(".env.local")
+dotenv.load_dotenv()
 limiter = Limiter(key_func=get_remote_address)
 
 model2 = ChatGoogleGenerativeAI(
