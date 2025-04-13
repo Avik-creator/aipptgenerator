@@ -7,6 +7,8 @@
     "next-dev": "next dev",
     "dev": "concurrently \"npm run next-dev\" \"npm run fastapi-dev\"",
     "build": "next build",
+    "build:fastapi": "source .venv/bin/activate && pip install -r requirements.txt && python3 -m uvicorn src.api.index:app --reload",
+    "buildwithfastapi": "npm run build && npm run build:fastapi",
     "start": "next start",
     "lint": "next lint"
   },
