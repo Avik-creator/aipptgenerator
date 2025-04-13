@@ -8,7 +8,6 @@ import { useTheme } from "@/context/theme-context"
 import { cn } from "@/lib/utils"
 import pptxgen from "pptxgenjs"
 
-
 type Slide = {
   title: string
   content: string[]
@@ -41,13 +40,10 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
   const slide = presentation.slides[currentSlide]
   
   // Extract the title by removing the "Slide Number:" prefix if it exists
-  // Extract the title by removed the "Slide <Number>:" prefix if it exists
-
   const displayTitle = slide.title.replace(/Slide \d+:\s*/, "")
   const displayTitleWithNumber = slide.title.match(/Slide \d+:\s*(.*)/)
     ? displayTitle
     : slide.title
-
 
   // Helper to convert tailwind gradient to a solid color
   const getSolidBackgroundColor = (themeColor: string) => {
@@ -179,42 +175,44 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
+      {/* Header with responsive adjustments */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
         <h3 className="text-xl font-bold">Preview</h3>
         <div className="flex gap-2">
-          {/* <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={generatePDF} 
-            disabled={isGenerating}
-          >
-            <Download className="h-4 w-4 mr-1" /> PDF
-          </Button> */}
           <Button 
             variant="outline" 
             size="sm" 
             onClick={generatePPTX} 
             disabled={isGenerating}
+            className="w-full sm:w-auto"
           >
             <FileType className="h-4 w-4 mr-1" /> PPTX
           </Button>
         </div>
       </div>
-      <h3 className="text-xl font-bold text-center">Preview</h3>
 
+      {/* Mobile-friendly slide container: fixed aspect-ratio on desktop, scrollable on mobile */}
       <div className={cn(
-        "relative pt-[56.25%] rounded-lg overflow-hidden shadow-md",
+        "rounded-lg overflow-hidden shadow-md",
+        "sm:relative sm:pt-[56.25%]", // Only apply aspect ratio on larger screens
         selectedTheme.color
       )}>
-        <div className={cn("absolute inset-0 p-8 flex flex-col", selectedTheme.textColor)}>
+        {/* For desktop: absolute positioning with the aspect ratio */}
+        {/* For mobile: regular flow with scrolling */}
+        <div className={cn(
+          "sm:absolute sm:inset-0 p-4 sm:p-8",
+          "min-h-[300px] max-h-[80vh] sm:max-h-none overflow-y-auto sm:overflow-y-visible", // Scrollable on mobile
+          selectedTheme.textColor
+        )}>
           <div className="flex-1 flex flex-col">
-            <h2 className="text-2xl font-bold mb-6 text-center">{displayTitleWithNumber}</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-6 text-center sticky top-0 bg-opacity-80 py-2 z-10"
+                style={{ backgroundColor: 'inherit' }}>{displayTitleWithNumber}</h2>
 
             <div className="flex-1 flex flex-col md:flex-row">
               <div className={cn("flex-1", slide.image_url ? "md:pr-4" : "")}>
-                <ul className="list-disc pl-6 space-y-2">
+                <ul className="list-disc pl-4 sm:pl-6 space-y-1 sm:space-y-2">
                   {slide.content.map((item, i) => (
-                    <li key={i} className="text-lg">
+                    <li key={i} className="text-sm sm:text-base md:text-lg">
                       {item}
                     </li>
                   ))}
@@ -223,15 +221,13 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
 
               {slide.image_url && (
                 <div className="flex-1 flex items-center justify-center mt-4 md:mt-0">
-                  <div className="relative w-full h-full flex items-center justify-center">
-                    <div className="relative w-full h-full max-h-48">
-                      <Image
-                        src={slide.image_url.replace(/^image:\s*/, "")}
-                        alt="Slide Image"
-                        fill
-                        className="object-contain"
-                      />
-                    </div>
+                  <div className="relative w-full h-36 sm:h-48 md:h-full flex items-center justify-center">
+                    <Image
+                      src={slide.image_url.replace(/^image:\s*/, "")}
+                      alt="Slide Image"
+                      fill
+                      className="object-contain"
+                    />
                   </div>
                 </div>
               )}
@@ -240,13 +236,25 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
         </div>
       </div>
 
-      <div className="flex items-center justify-between">
-        <Button variant="outline" size="sm" onClick={goToPrevSlide} disabled={currentSlide === 0}>
-          <ChevronLeft className="h-4 w-4 mr-1" /> Previous
+      {/* Mobile scroll indicator */}
+      <div className="text-center text-xs text-gray-500 italic block sm:hidden">
+        Scroll to see more content
+      </div>
+
+      {/* Navigation buttons with responsive spacing */}
+      <div className="flex items-center justify-between mt-2 sm:mt-4">
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={goToPrevSlide} 
+          disabled={currentSlide === 0}
+          className="text-xs sm:text-sm"
+        >
+          <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1" /> Prev
         </Button>
 
-        <span className="text-sm text-gray-500">
-          Slide {currentSlide + 1} of {presentation.slides.length}
+        <span className="text-xs sm:text-sm text-gray-500">
+          {currentSlide + 1}/{presentation.slides.length}
         </span>
 
         <Button
@@ -254,8 +262,9 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
           size="sm"
           onClick={goToNextSlide}
           disabled={currentSlide === presentation.slides.length - 1}
+          className="text-xs sm:text-sm"
         >
-          Next <ChevronRight className="h-4 w-4 ml-1" />
+          Next <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 ml-1" />
         </Button>
       </div>
     </div>
@@ -266,19 +275,25 @@ export function PresentationPreviewer() {
   const { selectedTheme } = useTheme()
 
   return (
-    <div className="mt-8">
-      <h3 className="text-2xl font-bold mb-4">Presentation Preview</h3>
+    <div className="mt-4 sm:mt-8">
+      <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Presentation Preview</h3>
       <div 
         className={cn(
-          "w-full aspect-video rounded-lg shadow-lg p-8", 
+          "w-full aspect-video rounded-lg shadow-lg p-4 sm:p-8", 
+          "min-h-[200px] max-h-[60vh] sm:max-h-none overflow-y-auto sm:overflow-visible",
           selectedTheme.color, 
           selectedTheme.textColor
         )}
       >
-        <div className="text-2xl font-bold mb-4">Sample Title Slide</div>
-        <div className={cn("p-4 rounded", selectedTheme.accent)}>
-          <p className="text-lg">This preview uses the {selectedTheme.name} theme</p>
+        <div className="text-lg sm:text-2xl font-bold mb-2 sm:mb-4">Sample Title Slide</div>
+        <div className={cn("p-2 sm:p-4 rounded", selectedTheme.accent)}>
+          <p className="text-sm sm:text-lg">This preview uses the {selectedTheme.name} theme</p>
         </div>
+      </div>
+      
+      {/* Mobile scroll indicator */}
+      <div className="text-center text-xs text-gray-500 italic block sm:hidden mt-1">
+        Scroll to see more content
       </div>
     </div>
   )
