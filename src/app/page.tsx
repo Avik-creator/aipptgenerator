@@ -1,4 +1,4 @@
-import { Hero } from "@/components/page/Hero";
+import Hero from "@/components/page/Hero";
 import { PresentationForm } from "@/components/page/presentation-form";
 import { ThemeSelector } from "@/components/page/theme-selector";
 import { Metadata } from "next";

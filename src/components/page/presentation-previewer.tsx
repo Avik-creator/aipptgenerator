@@ -45,25 +45,7 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
     ? displayTitle
     : slide.title
 
-  // Helper to convert tailwind gradient to a solid color
-  const getSolidBackgroundColor = (themeColor: string) => {
-    // Map theme gradients to simple solid colors for PowerPoint
-    if (themeColor.includes("from-blue-500")) {
-      return "#3B82F6" // Blue
-    } else if (themeColor.includes("from-purple-500")) {
-      return "#A855F7" // Purple
-    } else if (themeColor.includes("from-orange-500")) {
-      return "#F97316" // Orange
-    } else if (themeColor.includes("from-emerald-500")) {
-      return "#10B981" // Emerald
-    } else if (themeColor.includes("from-slate-800")) {
-      return "#1E293B" // Slate
-    } else if (themeColor.includes("from-amber-400")) {
-      return "#F59E0B" // Amber
-    }
-    // Default fallback
-    return "#4F46E5" // Indigo
-  }
+    
 
   const generatePPTX = async () => {
     setIsGenerating(true)
@@ -75,7 +57,7 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
       pptx.title = presentation.title
       
       // Get solid background color for the selected theme
-      const backgroundColor = getSolidBackgroundColor(selectedTheme.color)
+      const backgroundColor = selectedTheme.color
       
       // Determine text color - white for dark backgrounds, black for light
       const textColor = selectedTheme.name === "Golden Hour" ? "#000000" : "#FFFFFF"

@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Loader2 } from "lucide-react"
 import { createPresentation } from "@/app/actions/actions"
 import { PresentationPreview } from "@/components/page/presentation-previewer"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   audience: z.string().min(2, {
@@ -19,13 +20,13 @@ const formSchema = z.object({
   description: z.string().min(10, {
     message: "Description must be at least 10 characters.",
   }),
-  slideCount: z.coerce.number().min(3).max(20),
+  slideCount: z.coerce.number().min(3).max(10),
+  numberOfBulletPoints: z.coerce.number().min(1).max(5),
 })
 
 export function PresentationForm() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [presentation, setPresentation] = useState(null)
-  const [error, setError] = useState("")
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -33,23 +34,36 @@ export function PresentationForm() {
       audience: "",
       description: "",
       slideCount: 5,
+      numberOfBulletPoints: 3,
     },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsGenerating(true)
-    setError("")
 
     try {
       const result = await createPresentation(values)
 
       if (result.error) {
-        setError(result.error)
+        toast("Generation failed", {
+          description: "Failed to generate your presentation. Please try again.",
+          position: "bottom-right",
+          style: { backgroundColor: "red", color: "white", outline: "none"  },
+        })
       } else {
         setPresentation(result.presentation)
+        toast("Presentation Generated", {
+          description: "Your presentation has been created successfully!",
+          position: "bottom-right",
+          style: { backgroundColor: "green", color: "white", outline: "none" },
+        })
       }
     } catch (err) {
-      setError("An error occurred while generating your presentation.")
+      toast.error("Something went wrong", {
+        description: "An error occurred while generating your presentation.",
+        position: "bottom-right",
+        style: { backgroundColor: "red", color: "white", outline: "none"  },
+      })
       console.error(err)
     } finally {
       setIsGenerating(false)
@@ -57,7 +71,7 @@ export function PresentationForm() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+    <div className="bg-white rounded-xl shadow-lg p-6 mb-8" id="generate">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Describe Your Presentation</h2>
 
       <Form {...form}>
@@ -105,13 +119,26 @@ export function PresentationForm() {
                 <FormControl>
                   <Input type="number" min={5} max={20} {...field} />
                 </FormControl>
-                <FormDescription>Choose between 5 and 20 slides.</FormDescription>
+                <FormDescription>Choose between 5 and 10 slides.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {error && <div className="p-3 bg-red-100 text-red-700 rounded-md">{error}</div>}
+          <FormField
+            control={form.control}
+            name="numberOfBulletPoints"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Number of Bullet Points</FormLabel>
+                <FormControl>
+                  <Input type="number" min={1} max={5} {...field} />
+                </FormControl>
+                <FormDescription>Choose between 1 and 5 bullet points per slide.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <Button
             type="submit"
@@ -133,8 +160,6 @@ export function PresentationForm() {
       {presentation && (
         <div className="mt-8 space-y-6">
           <PresentationPreview presentation={presentation} />
-
-          
         </div>
       )}
     </div>

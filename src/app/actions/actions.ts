@@ -1,11 +1,12 @@
 "use server"
 
-import { z } from "zod"
+import {  z } from "zod"
 
 const formSchema = z.object({
     audience: z.string().min(2),
     description: z.string().min(10),
     slideCount: z.coerce.number().min(3).max(20),
+    numberOfBulletPoints: z.coerce.number().min(1).max(5),
   })
 
 
@@ -16,7 +17,7 @@ const formSchema = z.object({
       return { error: "Invalid input data" }
     }
 
-    const { audience, description, slideCount } = result.data
+    const { audience, description, slideCount, numberOfBulletPoints } = result.data
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/presentation`, {
@@ -28,6 +29,7 @@ const formSchema = z.object({
             audience,
           description,
           number_of_slides: slideCount,
+          number_of_bullet_points: numberOfBulletPoints,
         }),
       })
 
