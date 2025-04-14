@@ -197,18 +197,24 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
         "sm:relative sm:pt-[56.25%]", // Only apply aspect ratio on larger screens
         selectedTheme.color
       )}>
-        {/* For desktop: absolute positioning with the aspect ratio */}
-        {/* For mobile: regular flow with scrolling */}
+        {/* Fixed title bar that won't scroll with content */}
         <div className={cn(
-          "sm:absolute sm:inset-0 p-4 sm:p-8",
-          "min-h-[300px] max-h-[80vh] sm:max-h-none overflow-y-auto sm:overflow-y-visible", // Scrollable on mobile
+          "sm:absolute sm:top-0 sm:left-0 sm:right-0 sm:z-10 px-4 pt-4 sm:px-8 sm:pt-8 pb-2",
+          selectedTheme.textColor,
+          selectedTheme.color
+        )}>
+          <h2 className="text-xl sm:text-2xl font-bold text-center">{displayTitleWithNumber}</h2>
+        </div>
+        
+        {/* Content area that can scroll independently */}
+        <div className={cn(
+          "sm:absolute sm:inset-0 sm:pt-16 px-4 pb-4 sm:px-8 sm:pb-8", // Added top padding to make room for title
+          "min-h-[300px] max-h-[80vh] sm:max-h-none overflow-y-auto",
+          "mt-2", // Space between title and content
           selectedTheme.textColor
         )}>
           <div className="flex-1 flex flex-col">
-            <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-6 text-center sticky top-0 bg-opacity-80 py-2 z-10"
-                style={{ backgroundColor: 'inherit' }}>{displayTitleWithNumber}</h2>
-
-            <div className="flex-1 flex flex-col md:flex-row">
+            <div className="flex-1 flex flex-col md:flex-row pt-4"> {/* Added top padding for separation */}
               <div className={cn("flex-1", slide.image_url ? "md:pr-4" : "")}>
                 <ul className="list-disc pl-4 sm:pl-6 space-y-1 sm:space-y-2">
                   {slide.content.map((item, i) => (
