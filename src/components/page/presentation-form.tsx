@@ -79,104 +79,109 @@ export function PresentationForm() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-8" id="generate">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">
-        Describe Your Presentation
-      </h2>
+    <div
+      className="xl:flex xl:items-center xl:justify-center bg-white rounded-xl shadow-lg p-6 mb-8"
+      id="generate"
+    >
+      <div className="xl:w-1/3 mr-4">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          Describe Your Presentation
+        </h2>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="audience"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Presentation Audience</FormLabel>
-                <FormControl>
-                  <Input placeholder="E.g., College Students" {...field} />
-                </FormControl>
-                <FormDescription>
-                  This will make the Understand the Audience of your PPT.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="audience"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Presentation Audience</FormLabel>
+                  <FormControl>
+                    <Input placeholder="E.g., College Students" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This will make the Understand the Audience of your PPT.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Describe what you want in your presentation. Be specific for better results."
-                    className="min-h-24"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Provide details about the content you want in your slides.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Describe what you want in your presentation. Be specific for better results."
+                      className="min-h-24"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Provide details about the content you want in your slides.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="slideCount"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Number of Slides</FormLabel>
-                <FormControl>
-                  <Input type="number" min={5} max={20} {...field} />
-                </FormControl>
-                <FormDescription>
-                  Choose between 5 and 10 slides.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="slideCount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Number of Slides</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={5} max={20} {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Choose between 5 and 10 slides.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="numberOfBulletPoints"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Number of Bullet Points</FormLabel>
-                <FormControl>
-                  <Input type="number" min={1} max={5} {...field} />
-                </FormControl>
-                <FormDescription>
-                  Choose between 1 and 5 bullet points per slide.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="numberOfBulletPoints"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Number of Bullet Points</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={1} max={5} {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Choose between 1 and 5 bullet points per slide.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <Button
-            type="submit"
-            className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
-            disabled={isGenerating}
-          >
-            {isGenerating ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Generating...
-              </>
-            ) : (
-              "Generate Presentation"
-            )}
-          </Button>
-        </form>
-      </Form>
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
+              disabled={isGenerating}
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                "Generate Presentation"
+              )}
+            </Button>
+          </form>
+        </Form>
+      </div>
 
       {presentation && (
-        <div className="mt-8 space-y-6">
+        <div className="mt-8 space-y-6 xl:w-2/3 xl:mt-0 xl:ml-4">
           <PresentationPreview presentation={presentation} />
         </div>
       )}
