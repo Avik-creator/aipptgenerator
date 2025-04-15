@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2 } from "lucide-react";
+import { Inbox, Loader2 } from "lucide-react";
 import { createPresentation } from "@/app/actions/actions";
 import { PresentationPreview } from "@/components/page/presentation-previewer";
 import { toast } from "sonner";
@@ -180,9 +180,16 @@ export function PresentationForm() {
         </Form>
       </div>
 
-      {presentation && (
+      {presentation ? (
         <div className="mt-8 space-y-6 xl:w-2/3 xl:mt-0 xl:ml-4">
           <PresentationPreview presentation={presentation} />
+        </div>
+      ) : (
+        <div className="mt-8 space-y-6 hidden xl:w-2/3 xl:mt-0 xl:ml-4 xl:flex flex-col justify-center items-center">
+          <Inbox className="text-gray-400 w-24 h-24" />
+          <div className="text-gray-400 text-center">
+            Preview will appear here
+          </div>
         </div>
       )}
     </div>
