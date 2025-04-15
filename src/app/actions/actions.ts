@@ -38,7 +38,6 @@ const formSchema = z.object({
             throw new Error("Failed to generate presentation")
         }
         const data = await response.json()
-        console.log("Generated presentation data:", JSON.stringify(data, null, 2))
       return data;
     } catch (error) {
       console.error("Error generating presentation:", error)

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, FileType } from "lucide-react"
+import { ChevronLeft, ChevronRight, Download } from "lucide-react"
 import Image from "next/image"
 import { useTheme } from "@/context/theme-context"
 import { cn } from "@/lib/utils"
@@ -57,17 +57,17 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
       pptx.title = presentation.title
       
       // Get solid background color for the selected theme
-      const backgroundColor = selectedTheme.color
+      const backgroundColor = selectedTheme.hexBackground
       
       // Determine text color - white for dark backgrounds, black for light
-      const textColor = selectedTheme.name === "Golden Hour" ? "#000000" : "#FFFFFF"
+      const textColor = selectedTheme.textColor
       
       // Create slides
       presentation.slides.forEach((slide) => {
         const pptxSlide = pptx.addSlide()
         
         // Set solid background color
-        pptxSlide.background = { color: backgroundColor }
+        pptxSlide.background = {color: backgroundColor}
         
         // Add title
         pptxSlide.addText(slide.title, { 
@@ -159,63 +159,71 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
     <div className="space-y-4">
       {/* Header with responsive adjustments */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
-        <h3 className="text-xl font-bold">Preview</h3>
+        <h3 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">Preview</h3>
         <div className="flex gap-2">
           <Button 
             variant="outline" 
             size="sm" 
             onClick={generatePPTX} 
             disabled={isGenerating}
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-purple-600 text-white border-none hover:opacity-90 transition-opacity"
           >
-            <FileType className="h-4 w-4 mr-1" /> PPTX
+            <Download className="h-4 w-4 mr-2" /> Download PPTX
           </Button>
         </div>
       </div>
 
-      {/* Mobile-friendly slide container: fixed aspect-ratio on desktop, scrollable on mobile */}
+      {/* Enhanced slide container with better aesthetics */}
       <div className={cn(
-        "rounded-lg overflow-hidden shadow-md",
+        "rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-800",
         "sm:relative sm:pt-[56.25%]", // Only apply aspect ratio on larger screens
         selectedTheme.color
       )}>
-        {/* Fixed title bar that won't scroll with content */}
+        {/* Enhanced title bar */}
         <div className={cn(
-          "sm:absolute sm:top-0 sm:left-0 sm:right-0 sm:z-10 px-4 pt-4 sm:px-8 sm:pt-8 pb-2",
+          "sm:absolute sm:top-0 sm:left-0 sm:right-0 sm:z-10 px-4 pt-6 sm:px-8 sm:pt-10 pb-4",
+          "border-b border-white/10",
           selectedTheme.textColor,
           selectedTheme.color
         )}>
-          <h2 className="text-xl sm:text-2xl font-bold text-center">{displayTitleWithNumber}</h2>
+          <h2 className="text-xl sm:text-3xl font-bold text-center drop-shadow-md">{displayTitleWithNumber}</h2>
         </div>
         
-        {/* Content area that can scroll independently */}
+        {/* Content area with centered bullet points */}
         <div className={cn(
-          "sm:absolute sm:inset-0 sm:pt-16 px-4 pb-4 sm:px-8 sm:pb-8", // Added top padding to make room for title
-          "min-h-[300px] max-h-[80vh] sm:max-h-none overflow-y-auto",
-          "mt-2", // Space between title and content
+          "sm:absolute sm:inset-0 sm:pt-24 px-6 pb-6 sm:px-12 sm:pb-12",
+          "min-h-[350px] max-h-[80vh] sm:max-h-none overflow-y-auto",
+          "mt-2 flex items-center justify-center", // Center content vertically and horizontally
           selectedTheme.textColor
         )}>
-          <div className="flex-1 flex flex-col">
-            <div className="flex-1 flex flex-col md:flex-row pt-4"> {/* Added top padding for separation */}
-              <div className={cn("flex-1", slide.image_url ? "md:pr-4" : "")}>
-                <ul className="list-disc pl-4 sm:pl-6 space-y-1 sm:space-y-2">
+          <div className="w-full flex flex-col items-center"> {/* Center content horizontally */}
+            <div className="w-full flex flex-col md:flex-row pt-4 justify-center"> {/* Center flex container */}
+              <div className={cn(
+                "flex-1 flex flex-col items-center justify-center", // Center content
+                slide.image_url ? "md:pr-6" : ""
+              )}>
+                <ul className="list-none space-y-3 sm:space-y-4 max-w-xl mx-auto"> {/* Centered bullets with max width */}
                   {slide.content.map((item, i) => (
-                    <li key={i} className="text-sm sm:text-base md:text-lg">
-                      {item}
+                    <li key={i} className="text-sm sm:text-base md:text-lg flex items-start">
+                      <span className="inline-block w-5 h-5 bg-white/20 rounded-full mr-3 mt-1 flex-shrink-0"></span>
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
               {slide.image_url && (
-                <div className="flex-1 flex items-center justify-center mt-4 md:mt-0">
-                  <div className="relative w-full h-36 sm:h-48 md:h-full flex items-center justify-center">
-                    <Image
-                      src={slide.image_url.replace(/^image:\s*/, "")}
-                      alt="Slide Image"
-                      fill
-                      className="object-contain"
-                    />
+                <div className="flex-1 flex items-center justify-center mt-8 md:mt-0">
+                  <div className="relative w-full h-48 sm:h-64 md:h-full flex items-center justify-center">
+                    <div className="rounded-lg overflow-hidden p-1 bg-white/10 shadow-lg">
+                      <Image
+                        src={slide.image_url.replace(/^image:\s*/, "")}
+                        alt="Slide Image"
+                        width={400}
+                        height={300}
+                        className="object-contain rounded"
+                      />
+                    </div>
                   </div>
                 </div>
               )}
@@ -224,25 +232,31 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
         </div>
       </div>
 
-      {/* Mobile scroll indicator */}
-      <div className="text-center text-xs text-gray-500 italic block sm:hidden">
-        Scroll to see more content
+      {/* Mobile scroll indicator with nicer styling */}
+      <div className="text-center text-xs text-gray-500 italic block sm:hidden py-1">
+        <div className="flex items-center justify-center">
+          <span className="animate-bounce inline-block h-1 w-6 bg-gray-300 rounded-full mr-1"></span>
+          Scroll to view all content
+        </div>
       </div>
 
-      {/* Navigation buttons with responsive spacing */}
-      <div className="flex items-center justify-between mt-2 sm:mt-4">
+      {/* Enhanced navigation controls */}
+      <div className="flex items-center justify-between mt-4 sm:mt-6">
         <Button 
           variant="outline" 
           size="sm" 
           onClick={goToPrevSlide} 
           disabled={currentSlide === 0}
-          className="text-xs sm:text-sm"
+          className={cn(
+            "text-xs sm:text-sm rounded-full px-4 py-2 transition-all",
+            currentSlide === 0 ? "opacity-50" : "hover:bg-gray-100 dark:hover:bg-gray-800"
+          )}
         >
-          <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1" /> Prev
+          <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1" /> Previous
         </Button>
 
-        <span className="text-xs sm:text-sm text-gray-500">
-          {currentSlide + 1}/{presentation.slides.length}
+        <span className="text-xs sm:text-sm bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">
+          {currentSlide + 1} of {presentation.slides.length}
         </span>
 
         <Button
@@ -250,7 +264,10 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
           size="sm"
           onClick={goToNextSlide}
           disabled={currentSlide === presentation.slides.length - 1}
-          className="text-xs sm:text-sm"
+          className={cn(
+            "text-xs sm:text-sm rounded-full px-4 py-2 transition-all",
+            currentSlide === presentation.slides.length - 1 ? "opacity-50" : "hover:bg-gray-100 dark:hover:bg-gray-800"
+          )}
         >
           Next <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 ml-1" />
         </Button>
@@ -263,26 +280,36 @@ export function PresentationPreviewer() {
   const { selectedTheme } = useTheme()
 
   return (
-    <div className="mt-4 sm:mt-8">
-      <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">Presentation Preview</h3>
+    <div className="mt-8 sm:mt-12">
+      <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">Presentation Preview</h3>
       <div 
         className={cn(
-          "w-full aspect-video rounded-lg shadow-lg p-4 sm:p-8", 
+          "w-full aspect-video rounded-xl shadow-xl p-8 sm:p-10", 
           "min-h-[200px] max-h-[60vh] sm:max-h-none overflow-y-auto sm:overflow-visible",
+          "border border-white/10",
           selectedTheme.color, 
           selectedTheme.textColor
         )}
       >
-        <div className="text-lg sm:text-2xl font-bold mb-2 sm:mb-4">Sample Title Slide</div>
-        <div className={cn("p-2 sm:p-4 rounded", selectedTheme.accent)}>
-          <p className="text-sm sm:text-lg">This preview uses the {selectedTheme.name} theme</p>
+        <div className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center drop-shadow-md">Sample Title Slide</div>
+        <div className={cn(
+          "p-4 sm:p-6 rounded-lg mx-auto max-w-lg text-center", 
+          "border border-white/20",
+          selectedTheme.accent
+        )}>
+          <p className="text-base sm:text-xl">This preview uses the {selectedTheme.name} theme</p>
+          <p className="text-sm sm:text-base mt-2 opacity-80">Choose a theme to customize your presentation look and feel</p>
         </div>
       </div>
       
-      {/* Mobile scroll indicator */}
-      <div className="text-center text-xs text-gray-500 italic block sm:hidden mt-1">
-        Scroll to see more content
+      {/* Enhanced mobile scroll indicator */}
+      <div className="text-center text-xs text-gray-500 italic block sm:hidden mt-2">
+        <div className="flex items-center justify-center">
+          <span className="animate-bounce inline-block h-1 w-6 bg-gray-300 rounded-full mr-1"></span>
+          Scroll to view all content
+        </div>
       </div>
     </div>
+
   )
 }
