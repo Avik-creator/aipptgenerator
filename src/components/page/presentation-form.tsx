@@ -1,17 +1,25 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Loader2 } from "lucide-react"
-import { createPresentation } from "@/app/actions/actions"
-import { PresentationPreview } from "@/components/page/presentation-previewer"
-import { toast } from "sonner"
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Loader2 } from "lucide-react";
+import { createPresentation } from "@/app/actions/actions";
+import { PresentationPreview } from "@/components/page/presentation-previewer";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   audience: z.string().min(2, {
@@ -22,11 +30,11 @@ const formSchema = z.object({
   }),
   slideCount: z.coerce.number().min(3).max(10),
   numberOfBulletPoints: z.coerce.number().min(1).max(5),
-})
+});
 
 export function PresentationForm() {
-  const [isGenerating, setIsGenerating] = useState(false)
-  const [presentation, setPresentation] = useState(null)
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [presentation, setPresentation] = useState(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -36,44 +44,45 @@ export function PresentationForm() {
       slideCount: 5,
       numberOfBulletPoints: 3,
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsGenerating(true)
+    setIsGenerating(true);
 
     try {
-      const result = await createPresentation(values)
+      const result = await createPresentation(values);
 
       if (result.error) {
-
         toast("Generation failed", {
           description: result.error,
           position: "bottom-right",
-          style: { backgroundColor: "red", color: "white", outline: "none"  },
-        })
+          style: { backgroundColor: "red", color: "white", outline: "none" },
+        });
       } else {
-        setPresentation(result.presentation)
+        setPresentation(result.presentation);
         toast("Presentation Generated", {
           description: "Your presentation has been created successfully!",
           position: "bottom-right",
           style: { backgroundColor: "green", color: "white", outline: "none" },
-        })
+        });
       }
     } catch (err) {
       toast.error("Something went wrong", {
         description: "An error occurred while generating your presentation.",
         position: "bottom-right",
-        style: { backgroundColor: "red", color: "white", outline: "none"  },
-      })
-      console.error(err)
+        style: { backgroundColor: "red", color: "white", outline: "none" },
+      });
+      console.error(err);
     } finally {
-      setIsGenerating(false)
+      setIsGenerating(false);
     }
   }
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-8" id="generate">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Describe Your Presentation</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">
+        Describe Your Presentation
+      </h2>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -86,7 +95,9 @@ export function PresentationForm() {
                 <FormControl>
                   <Input placeholder="E.g., College Students" {...field} />
                 </FormControl>
-                <FormDescription>This will make the Understand the Audience of your PPT.</FormDescription>
+                <FormDescription>
+                  This will make the Understand the Audience of your PPT.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -105,7 +116,9 @@ export function PresentationForm() {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>Provide details about the content you want in your slides.</FormDescription>
+                <FormDescription>
+                  Provide details about the content you want in your slides.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -120,7 +133,9 @@ export function PresentationForm() {
                 <FormControl>
                   <Input type="number" min={5} max={20} {...field} />
                 </FormControl>
-                <FormDescription>Choose between 5 and 10 slides.</FormDescription>
+                <FormDescription>
+                  Choose between 5 and 10 slides.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -135,7 +150,9 @@ export function PresentationForm() {
                 <FormControl>
                   <Input type="number" min={1} max={5} {...field} />
                 </FormControl>
-                <FormDescription>Choose between 1 and 5 bullet points per slide.</FormDescription>
+                <FormDescription>
+                  Choose between 1 and 5 bullet points per slide.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -164,5 +181,5 @@ export function PresentationForm() {
         </div>
       )}
     </div>
-  )
+  );
 }
