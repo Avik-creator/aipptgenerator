@@ -19,7 +19,7 @@ const formSchema = z.object({
   }),
   description: z.string().min(10, {
     message: "Description must be at least 10 characters.",
-  }),
+  }).max(50),
   slideCount: z.coerce.number().min(3).max(10),
   numberOfBulletPoints: z.coerce.number().min(1).max(5),
 })
