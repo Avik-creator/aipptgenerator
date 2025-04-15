@@ -55,15 +55,36 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          <Link href="/#generate">
-            <motion.button 
-              className="bg-white text-purple-600 font-bold py-4 px-8 rounded-full text-lg shadow-lg hover:shadow-xl"
+            <Link href="/">
+            <motion.div 
+              className="bg-white text-purple-600 rounded-full p-4 shadow-lg hover:shadow-xl inline-block transition duration-300 ease-in-out"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              animate={{
+                y: [0, 10, 0, -10, 0],
+              }}
+              transition={{
+                duration: 3,
+                ease: "easeInOut",
+                repeat: Infinity,
+              }}
             >
-              Create Presentation
-            </motion.button>
-          </Link>
+              <motion.svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="h-8 w-8" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+              >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M19 14l-7 7m0 0l-7-7m7 7V3" 
+              />
+              </motion.svg>
+            </motion.div>
+            </Link>
         </motion.div>
       </div>
       

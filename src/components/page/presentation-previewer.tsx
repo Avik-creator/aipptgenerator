@@ -115,8 +115,8 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
                 data: imageUrl,
                 x: '55%', 
                 y: 1.5, 
-                w: 4, 
-                h: 3
+                w: 3.5, 
+                h: 3.5
               })
             } else {
               // For URL images
@@ -124,8 +124,8 @@ export function PresentationPreview({ presentation }: { presentation: Presentati
                 path: imageUrl,
                 x: '55%', 
                 y: 1.5, 
-                w: 4, 
-                h: 3
+                w: 3.5, 
+                h: 3.5
               })
             }
           } catch (imageError) {
