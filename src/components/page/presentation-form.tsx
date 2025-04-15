@@ -45,8 +45,9 @@ export function PresentationForm() {
       const result = await createPresentation(values)
 
       if (result.error) {
+
         toast("Generation failed", {
-          description: "Failed to generate your presentation. Please try again.",
+          description: result.error,
           position: "bottom-right",
           style: { backgroundColor: "red", color: "white", outline: "none"  },
         })

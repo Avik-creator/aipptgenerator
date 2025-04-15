@@ -34,9 +34,13 @@ const formSchema = z.object({
       })
 
         if (!response.ok) {
-          console.error("Failed to generate presentation:", response)
-            throw new Error("Failed to generate presentation")
+         if(response.status == 429){
+          return { error: "Too Many Requests. Please try again later after 24 hours." }
+         }else{
+          return {error: response.statusText}
+         }
         }
+
         const data = await response.json()
       return data;
     } catch (error) {
