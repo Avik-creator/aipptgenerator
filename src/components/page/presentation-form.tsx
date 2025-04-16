@@ -143,10 +143,10 @@ export function PresentationForm() {
                 <FormItem>
                   <FormLabel>Number of Slides</FormLabel>
                   <FormControl>
-                    <Input type="number" min={5} max={20} {...field} />
+                    <Input type="number" min={5} max={8} {...field} />
                   </FormControl>
                   <FormDescription>
-                    Choose between 5 and 10 slides.
+                    Choose between 5 and 8 slides.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
