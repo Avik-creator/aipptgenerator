@@ -119,8 +119,8 @@ export function PresentationPreview({
                 data: imageUrl,
                 x: "55%",
                 y: 1.5,
-                w: 3.5,
-                h: 3.5,
+                w: 3,
+                h: 3,
               });
             } else {
               // For URL images
@@ -128,8 +128,8 @@ export function PresentationPreview({
                 path: imageUrl,
                 x: "55%",
                 y: 1.5,
-                w: 3.5,
-                h: 3.5,
+                w: 3,
+                h: 3,
               });
             }
           } catch (imageError) {
@@ -198,7 +198,7 @@ export function PresentationPreview({
             selectedTheme.color,
           )}
         >
-          <h2 className="text-xl sm:text-3xl font-bold text-center drop-shadow-md">
+          <h2 className="text-lg sm:text-2xl font-bold text-center drop-shadow-md">
             {displayTitleWithNumber}
           </h2>
         </div>
@@ -207,39 +207,35 @@ export function PresentationPreview({
         <div
           className={cn(
             "sm:absolute sm:inset-0 sm:pt-24 px-6 pb-6 sm:px-12 sm:pb-12",
-            "min-h-[350px] max-h-[80vh] sm:max-h-none overflow-y-auto",
-            "mt-2 flex items-center justify-center", // Center content vertically and horizontally
+            "min-h-[400px] overflow-y-auto sm:overflow-y-auto", 
+            "mt-8 flex items-center justify-center", 
             selectedTheme.textColor,
           )}
         >
-          <div className="w-full flex flex-col items-center">
-            {" "}
-            {/* Center content horizontally */}
-            <div className="w-full flex flex-col md:flex-row pt-4 justify-center">
-              {" "}
-              {/* Center flex container */}
+          <div className="w-full flex flex-col items-center py-4"> 
+            <div className="w-full flex flex-col md:flex-row justify-center gap-4"> 
               <div
                 className={cn(
-                  "flex-1 flex flex-col items-center justify-center", // Center content
+                  "flex-1 flex flex-col items-center justify-start", // Changed to justify-start for proper alignment
                   slide.image_url ? "md:pr-6" : "",
                 )}
               >
-                <ul className="list-none space-y-3 sm:space-y-4 max-w-xl mx-auto">
-                  {" "}
-                  {/* Centered bullets with max width */}
+                <ul className="list-none space-y-3 sm:space-y-4 max-w-xl mx-auto w-full"> 
                   {slide.content.map((item, i) => (
                     <li
                       key={i}
-                      className="text-sm sm:text-base md:text-lg flex items-start"
+                      className="text-sm sm:text-base md:text-lg flex items-start mb-2" // Added bottom margin
                     >
                       <span className="inline-block w-5 h-5 bg-white/20 rounded-full mr-3 mt-1 flex-shrink-0"></span>
-                      <span>{item}</span>
+                      <span className="flex-1">
+                        {item.includes("-") ? item.split("-")[1].trim() : item}
+                      </span> 
                     </li>
                   ))}
                 </ul>
               </div>
               {slide.image_url && (
-                <div className="flex-1 flex items-center justify-center mt-8 md:mt-0">
+                <div className="flex-1 flex items-center justify-center mt-4 md:mt-0"> {/* Reduced top margin on mobile */}
                   <div className="relative w-full h-48 sm:h-64 md:h-full flex items-center justify-center">
                     <div className="rounded-lg overflow-hidden p-1 bg-white/10 shadow-lg">
                       <Image
