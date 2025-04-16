@@ -6,3 +6,5 @@ export function GET(request: Request) {
   const ipAddress = ip.split(',')[0].trim();
   return new Response(JSON.stringify({ ip: ipAddress }))  
 }
+
+//44.192.81.201
