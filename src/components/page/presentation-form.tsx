@@ -27,7 +27,9 @@ const formSchema = z.object({
   }),
   description: z.string().min(10, {
     message: "Description must be at least 10 characters.",
-  }).max(50),
+  }).max(50, {
+    message: "Description must be at most 50 characters.",
+  }),
   slideCount: z.coerce.number().min(3).max(10),
   numberOfBulletPoints: z.coerce.number().min(1).max(5),
 });
@@ -114,14 +116,20 @@ export function PresentationForm() {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Describe what you want in your presentation. Be specific for better results."
-                      className="min-h-24"
-                      {...field}
-                    />
+                    <div className="relative">
+                      <Textarea
+                        placeholder="Describe what you want in your presentation. Be specific for better results."
+                        className="min-h-24"
+                        maxLength={50}
+                        {...field}
+                      />
+                      <div className="absolute bottom-2 right-2 text-xs text-gray-500">
+                        {field.value.length}/50
+                      </div>
+                    </div>
                   </FormControl>
                   <FormDescription>
-                    Provide details about the content you want in your slides.
+                    Provide details about the content you want in your slides (max 50 characters).
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
