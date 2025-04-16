@@ -1,27 +1,18 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import {ipAddress} from "@vercel/functions"
+import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
- // Clone the request headers so that we don't modify the original headers object
-  const requestHeaders = new Headers(request.headers);
+export function middleware(request: NextRequest){
+    const ip = ipAddress(request);
+    if (!ip) {
+        return new Response('IP address not found', { status: 404 });
+    }
 
-  // Check if the hosting platform provides the client's IP address and store it in a variable
-  const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "";
-  const userAgent = request.headers.get("user-agent") || "";
+    request.headers.set('x-forwarded-for', ip);
 
-  // Set the IP and user agent headers into request to be used in the action
-  requestHeaders.set("x-forwarded-for", ip);
-  requestHeaders.set("user-agent", userAgent);
+    return request;
+}
 
-  return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
+export const config = {
+    matcher: ["/api/ip"],
 
-  return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
 }

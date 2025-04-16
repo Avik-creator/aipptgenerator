@@ -7,4 +7,4 @@ export function GET(request: Request) {
   return new Response(JSON.stringify({ ip: ipAddress }))  
 }
 
-//44.192.81.201
+// 54.164.76.89
