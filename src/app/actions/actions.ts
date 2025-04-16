@@ -2,6 +2,7 @@
 
 import {  z } from "zod"
 
+
 const formSchema = z.object({
     audience: z.string().min(2),
     description: z.string().min(10),
@@ -9,16 +10,6 @@ const formSchema = z.object({
     numberOfBulletPoints: z.coerce.number().min(1).max(5),
   })
 
-
-  async function getIpOfClient(){
-    try {
-       const res = await fetch("https://api64.ipify.org?format=json")
-       const data = await res.json()
-      return data.ip
-      } catch {
-       return "unknown"
-      }
-  }
 
 
   export async function createPresentation(formData: z.infer<typeof formSchema>) {
@@ -29,14 +20,28 @@ const formSchema = z.object({
     }
 
     const { audience, description, slideCount, numberOfBulletPoints } = result.data
-    const clientIP = await getIpOfClient()
+
+    // Get the client's IP address
+    const response = await fetch(`${process.env.NEXT_PUBLIC_DEPLOYED_URL}/api/ip`)
+    if (!response.ok) {
+      return { error: "Failed to fetch client IP address" }
+    }
+    // export function GET(request: Request) {
+    //   const ip = request.headers.get("x-client-ip") || request.headers.get("x-forwarded-for") || request.headers.get("cf-connecting-ip") || request.headers.get("x-real-ip") || request.headers.get("x-cluster-client-ip") || request.headers.get("x-client-ip") || request.headers.get("x-client-ip");
+    //   console.log("Client IP Address:", ip);
+    //   return new Response(JSON.stringify({ ip }))
+    // }
+
+    const ipData = await response.json()
+    const clientIPAddress = ipData.ip
+    console.log("Client IP Address:", clientIPAddress)
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/presentation`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Client-IP": clientIP,
+          "X-Client-IP": clientIPAddress,
         },
         body: JSON.stringify({
             audience,
