@@ -46,7 +46,7 @@ tools = [search]
 agent_executor = create_react_agent(presentation_model, tools)
 
 # FastAPI app setup
-app = FastAPI(docs_url="/api/docs", openapi_url="/api/openapi.json")
+app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(SlowAPIMiddleware)
