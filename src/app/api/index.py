@@ -78,7 +78,7 @@ async def custom_rate_limit_handler(request: Request, exc: RateLimitExceeded):
     )
 
 # Welcome route
-@app.get("/api")
+@app.get("/api/py")
 def get():
     return JSONResponse(content={"message": "Welcome to the Presentation API!"})
 
@@ -136,7 +136,7 @@ IMPORTANT:
 
 # POST endpoint to generate PPT
 
-@app.post("/api/presentation")
+@app.post("/api/py/presentation")
 
 async def returnPPTResponse(request: Request, req: PresentationRequest):
     full_prompt = system_prompt.format(
